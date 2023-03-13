@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.nacos.logbackadpater;
+package com.alibaba.nacos.logbackadapter;
 
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.Context;

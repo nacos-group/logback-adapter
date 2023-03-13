@@ -16,7 +16,7 @@
  *
  */
 
-package com.alibaba.nacos.logbackadpater;
+package com.alibaba.nacos.logbackadapter;
 
 import ch.qos.logback.core.Context;
 import ch.qos.logback.core.joran.action.ActionUtil;

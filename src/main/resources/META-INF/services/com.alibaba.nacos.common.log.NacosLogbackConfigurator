@@ -15,4 +15,4 @@
 #
 #
 
-com.alibaba.nacos.logbackadpater.NacosLogbackConfiguratorAdapterV2
+com.alibaba.nacos.logbackadapter.NacosLogbackConfiguratorAdapterV2

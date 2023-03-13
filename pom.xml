@@ -3,10 +3,10 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.alibaba.nacos</groupId>
-    <artifactId>logback-adpater</artifactId>
+    <artifactId>logback-adapter</artifactId>
     <version>1.0.0</version>
-    <name>logback-adpater</name>
-    <description>logback-adpater</description>
+    <name>logback-adapter</name>
+    <description>logback-adapter</description>
     <properties>
         <java.version>17</java.version>
         <slf4j-api.version>2.0.6</slf4j-api.version>
