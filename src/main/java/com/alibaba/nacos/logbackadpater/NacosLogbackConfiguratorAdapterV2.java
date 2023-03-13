@@ -46,12 +46,14 @@ public class NacosLogbackConfiguratorAdapterV2 extends JoranConfigurator impleme
     public void registerSafeConfiguration(Model top) {
     }
     
+    @Override
     protected void addModelHandlerAssociations(DefaultProcessor defaultProcessor) {
         defaultProcessor.addHandler(NacosClientPropertyModel.class,
                 (handlerContext, handlerMic) -> new NacosClientPropertyModelHandler(this.context));
         super.addModelHandlerAssociations(defaultProcessor);
     }
     
+    @Override
     public void addElementSelectorAndActionAssociations(RuleStore ruleStore) {
         super.addElementSelectorAndActionAssociations(ruleStore);
         ruleStore.addRule(new ElementSelector("configuration/nacosClientProperty"),
