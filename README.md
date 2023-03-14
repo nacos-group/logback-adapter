@@ -25,3 +25,9 @@ For example:
             <version>${nacos.client.version}</version>
         </dependency>
 ```
+
+## Version adapter
+
+|Adapter Version|Nacos Client Version|Logback Version|
+|---------------|---------------|---------------|
+|1.0.0| 2.2.1 ~ latest | 1.4.5 ~ latest |
