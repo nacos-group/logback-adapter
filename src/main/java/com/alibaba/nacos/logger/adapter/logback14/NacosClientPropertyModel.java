@@ -16,16 +16,22 @@
  *
  */
 
-package com.alibaba.nacos.logbackadapter;
+package com.alibaba.nacos.logger.adapter.logback14;
 
 import ch.qos.logback.core.model.NamedModel;
 
 /**
  * Logback model to support <nacosClientProperty/> tags.
+ * <p>
+ * Move from https://github.com/nacos-grorp/logback-adapter
+ * </p>
  *
  * @author hujun
+ * @author xiweng.yy
+ * @since 2.4.0
  */
 public class NacosClientPropertyModel extends NamedModel {
+    
     private String scope;
     
     private String defaultValue;

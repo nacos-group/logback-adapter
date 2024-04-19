@@ -16,7 +16,7 @@
  *
  */
 
-package com.alibaba.nacos.logbackadapter;
+package com.alibaba.nacos.logger.adapter.logback14;
 
 import ch.qos.logback.core.Context;
 import ch.qos.logback.core.joran.action.ActionUtil;
@@ -26,22 +26,26 @@ import ch.qos.logback.core.model.processor.ModelHandlerBase;
 import ch.qos.logback.core.model.processor.ModelHandlerException;
 import ch.qos.logback.core.model.processor.ModelInterpretationContext;
 import ch.qos.logback.core.util.OptionHelper;
-import com.alibaba.nacos.common.log.NacosLogbackProperties;
-import com.alibaba.nacos.common.spi.NacosServiceLoader;
-
-import java.util.Collection;
+import com.alibaba.nacos.common.logging.NacosLoggingProperties;
 
 /**
- * Logback model to support <nacosClientProperty/> tags.
- * for example:
+ * Logback model to support <nacosClientProperty/> tags. for example:
  * <nacosClientProperty scope="context" name="logPath" source="system.log.path" defaultValue="/root" />
+ * <p>
+ * Move from https://github.com/nacos-grorp/logback-adapter
+ * </p>
  *
  * @author hujun
+ * @author xiweng.yy
+ * @since 2.4.0
  */
 public class NacosClientPropertyModelHandler extends ModelHandlerBase {
     
-    public NacosClientPropertyModelHandler(Context context) {
+    private final NacosLoggingProperties loggingProperties;
+    
+    public NacosClientPropertyModelHandler(Context context, NacosLoggingProperties loggingProperties) {
         super(context);
+        this.loggingProperties = loggingProperties;
     }
     
     @Override
@@ -57,8 +61,6 @@ public class NacosClientPropertyModelHandler extends ModelHandlerBase {
     }
     
     private String getValue(String source, String defaultValue) {
-        Collection<NacosLogbackProperties> logbackClientProperties = NacosServiceLoader.load(
-                NacosLogbackProperties.class);
-        return logbackClientProperties.stream().findFirst().get().getValue(source, defaultValue);
+        return null == loggingProperties ? defaultValue : loggingProperties.getValue(source, defaultValue);
     }
 }
