@@ -11,12 +11,12 @@ For example:
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.5</version>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>logback-adapter</artifactId>
-            <version>1.0.0</version>
+            <version>${logback-adapter.version}</version>
         </dependency>
         <!--  nacos.client.version >= 2.2.1 -->
         <dependency>
@@ -30,4 +30,5 @@ For example:
 
 |Adapter Version|Nacos Client Version|Logback Version|
 |---------------|---------------|---------------|
-|1.0.0| 2.2.1 ~ latest | 1.4.5 ~ latest |
+|1.0.X| 2.2.1 ~ 2.3.X | 1.3.0 ~ latest |
+|1.1.X| 2.4.0 ~ latest | 1.3.0 ~ latest |
