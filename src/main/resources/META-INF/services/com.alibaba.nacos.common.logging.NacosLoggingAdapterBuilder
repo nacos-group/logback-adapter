@@ -14,4 +14,4 @@
 # limitations under the License.
 #
 
-com.alibaba.nacos.logger.adapter.logback14.LogbackNacosLoggingAdapter
+com.alibaba.nacos.logger.adapter.logback14.LogbackNacosLoggingAdapterBuilder
