@@ -13,7 +13,7 @@
         <url>git@github.com:alibaba/nacos.git</url>
         <connection>scm:git@github.com:alibaba/nacos.git</connection>
         <developerConnection>scm:git@github.com:alibaba/nacos.git</developerConnection>
-        <tag>nacos-logback-adapter-${version}</tag>
+        <tag>nacos-logback-adapter-${project.version}</tag>
     </scm>
     <developers>
         <developer>
