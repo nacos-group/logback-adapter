@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.alibaba.nacos.logbackadapter;
+package com.alibaba.nacos.logger.adapter.logback14;
 
 import ch.qos.logback.classic.joran.JoranConfigurator;
-import ch.qos.logback.core.Context;
 import ch.qos.logback.core.joran.spi.ElementSelector;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.joran.spi.RuleStore;
 import ch.qos.logback.core.model.Model;
 import ch.qos.logback.core.model.processor.DefaultProcessor;
-import com.alibaba.nacos.common.log.NacosLogbackConfigurator;
+import com.alibaba.nacos.common.logging.NacosLoggingProperties;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,45 +31,45 @@ import java.net.URLConnection;
 
 /**
  * ensure that Nacos configuration does not affect user configuration savepoints and  scanning url.
+ * <p>
+ * Move from https://github.com/nacos-grorp/logback-adapter
+ * </p>
  *
  * @author hujun
+ * @author xiweng.yy
+ * @since 2.4.0
  */
-public class NacosLogbackConfiguratorAdapterV2 extends JoranConfigurator implements NacosLogbackConfigurator {
+public class NacosLogbackConfiguratorAdapterV2 extends JoranConfigurator {
     
-    /**
-     * ensure that Nacos configuration does not affect user configuration savepoints.
-     *
-     * @param top safe data
-     */
+    private NacosLoggingProperties loggingProperties;
+    
+    public void setLoggingProperties(NacosLoggingProperties loggingProperties) {
+        this.loggingProperties = loggingProperties;
+    }
+    
     @Override
     public void registerSafeConfiguration(Model top) {
     }
     
     @Override
     protected void addModelHandlerAssociations(DefaultProcessor defaultProcessor) {
-        defaultProcessor.addHandler(NacosClientPropertyModel.class,
-                (handlerContext, handlerMic) -> new NacosClientPropertyModelHandler(this.context));
+        defaultProcessor.addHandler(NacosClientPropertyModel.class, new NacosModelHandlerFactoryMethod(loggingProperties));
         super.addModelHandlerAssociations(defaultProcessor);
     }
     
     @Override
     public void addElementSelectorAndActionAssociations(RuleStore ruleStore) {
         super.addElementSelectorAndActionAssociations(ruleStore);
-        ruleStore.addRule(new ElementSelector("configuration/nacosClientProperty"),
-                NacosClientPropertyModelAction::new);
+        ruleStore
+                .addRule(new ElementSelector("configuration/nacosClientProperty"), NacosClientPropertyModelAction::new);
     }
     
-    @Override
-    public int getVersion() {
-        return 2;
-    }
-    
-    @Override
-    public void setContext(Object loggerContext) {
-        super.setContext((Context) loggerContext);
-    }
-    
-    @Override
+    /**
+     * ensure that Nacos configuration does not affect user configuration scanning url.
+     *
+     * @param url config url
+     * @throws Exception e
+     */
     public void configure(URL url) throws Exception {
         InputStream in = null;
         try {

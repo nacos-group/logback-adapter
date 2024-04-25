@@ -16,7 +16,7 @@
  *
  */
 
-package com.alibaba.nacos.logbackadapter;
+package com.alibaba.nacos.logger.adapter.logback14;
 
 import ch.qos.logback.core.joran.action.BaseModelAction;
 import ch.qos.logback.core.joran.spi.SaxEventInterpretationContext;
@@ -25,10 +25,16 @@ import org.xml.sax.Attributes;
 
 /**
  * Logback model action to support <nacosClientProperty/> tags.
+ * <p>
+ * Move from https://github.com/nacos-grorp/logback-adapter
+ * </p>
  *
  * @author hujun
+ * @author xiweng.yy
+ * @since 2.4.0
  */
 public class NacosClientPropertyModelAction extends BaseModelAction {
+    
     private static final String SOURCE_ATTRIBUTE = "source";
     
     private static final String DEFAULT_VALUE_ATTRIBUTE = "defaultValue";
