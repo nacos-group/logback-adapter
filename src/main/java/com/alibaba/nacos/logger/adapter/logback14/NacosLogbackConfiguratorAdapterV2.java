@@ -59,9 +59,11 @@ public class NacosLogbackConfiguratorAdapterV2 extends JoranConfigurator {
     
     @Override
     public void addElementSelectorAndActionAssociations(RuleStore ruleStore) {
-        super.addElementSelectorAndActionAssociations(ruleStore);
-        ruleStore
-                .addRule(new ElementSelector("configuration/nacosClientProperty"), NacosClientPropertyModelAction::new);
+        ElementSelector elementSelector = new ElementSelector("configuration/nacosClientProperty");
+        if (null == ruleStore.matchActions(elementSelector.duplicate())) {
+            super.addElementSelectorAndActionAssociations(ruleStore);
+            ruleStore.addRule(elementSelector, NacosClientPropertyModelAction::new);
+        }
     }
     
     /**
