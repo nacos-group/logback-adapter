@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.alibaba.nacos</groupId>
     <artifactId>logback-adapter</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>logback-adapter</name>
     <description>logback-adapter</description>
     
