@@ -20,11 +20,16 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggerContextListener;
+import ch.qos.logback.classic.turbo.TurboFilter;
+import ch.qos.logback.core.spi.FilterReply;
 import com.alibaba.nacos.common.logging.NacosLoggingAdapter;
 import com.alibaba.nacos.common.logging.NacosLoggingProperties;
 import com.alibaba.nacos.common.utils.ResourceUtils;
 import com.alibaba.nacos.common.utils.StringUtils;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+
+import java.util.Iterator;
 
 /**
  * Support for Logback version 1.3.0 to current latest 1.4.X.
@@ -90,8 +95,42 @@ public class LogbackNacosLoggingAdapter implements NacosLoggingAdapter {
         String location = loggingProperties.getLocation();
         configurator.setLoggingProperties(loggingProperties);
         LoggerContext loggerContext = loadConfigurationOnStart(location);
+        addNacosLogFilterIfNecessary(loggerContext);
         if (hasNoListener(loggerContext)) {
             addListener(loggerContext, location);
+        }
+    }
+    
+    private void addNacosLogFilterIfNecessary(LoggerContext loggerContext) {
+        //first is NacosLogTurboFilter
+        if (!loggerContext.getTurboFilterList().isEmpty() && loggerContext.getTurboFilterList()
+                .get(0) instanceof NacosLogTurboFilter) {
+            return;
+        }
+        // not empty and first not NacosLogTurboFilter, remove NacosLogTurboFilter
+        if (!loggerContext.getTurboFilterList().isEmpty() && !(loggerContext.getTurboFilterList()
+                .get(0) instanceof NacosLogTurboFilter)) {
+            Iterator<TurboFilter> iterator = loggerContext.getTurboFilterList().iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next() instanceof NacosLogTurboFilter) {
+                    iterator.remove();
+                }
+            }
+        }
+        //add NacosLogTurboFilter to head.
+        loggerContext.getTurboFilterList().add(0, new NacosLogTurboFilter());
+    }
+    
+    class NacosLogTurboFilter extends TurboFilter {
+        
+        @Override
+        public FilterReply decide(Marker marker, Logger logger, Level level, String s, Object[] objects,
+                Throwable throwable) {
+            if (logger.getName().startsWith("com.alibaba.nacos")
+                    && logger.getEffectiveLevel().levelInt <= level.levelInt) { // only filter nacos log
+                return FilterReply.ACCEPT;
+            }
+            return FilterReply.NEUTRAL;
         }
     }
     
