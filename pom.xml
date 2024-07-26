@@ -39,7 +39,7 @@
         <!-- use jdk 8 to complier with adapter, but logback 1.3 upper need jdk11, so should use jdk11 to do mvn install -->
         <java.version>8</java.version>
         <logback.version>1.4.14</logback.version>
-        <nacos.version>2.4.0</nacos.version>
+        <nacos.version>[2.4.0-SNAPSHOT, )</nacos.version>
         
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
