@@ -19,8 +19,10 @@ package com.alibaba.nacos.logger.adapter.logback14;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.classic.turbo.TurboFilter;
+import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.spi.FilterReply;
 import com.alibaba.nacos.common.logging.NacosLoggingAdapter;
 import com.alibaba.nacos.common.logging.NacosLoggingProperties;
@@ -29,7 +31,10 @@ import com.alibaba.nacos.common.utils.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Support for Logback version 1.3.0 to current latest 1.4.X.
@@ -151,6 +156,11 @@ public class LogbackNacosLoggingAdapter implements NacosLoggingAdapter {
     
     private LoggerContext loadConfigurationOnStart(final String location) {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        // 如果任意一个 appender 已存在，说明配置已经加载过，直接返回
+        if (hasAnyAppender(loggerContext, "ASYNC-CONFIG", "ASYNC-REMOTE", "ASYNC-NAMING")) {
+            return loggerContext;
+        }
+        
         configurator.setContext(loggerContext);
         if (StringUtils.isNotBlank(location)) {
             try {
@@ -160,6 +170,20 @@ public class LogbackNacosLoggingAdapter implements NacosLoggingAdapter {
             }
         }
         return loggerContext;
+    }
+    
+    private boolean hasAnyAppender(LoggerContext context, String... appenderNames) {
+        Set<String> targets = new HashSet<>(Arrays.asList(appenderNames));
+        for (Logger logger : context.getLoggerList()) {
+            Iterator<Appender<ILoggingEvent>> appenderIterator = logger.iteratorForAppenders();
+            while (appenderIterator.hasNext()) {
+                Appender<ILoggingEvent> appender = appenderIterator.next();
+                if (targets.contains(appender.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     class NacosLoggerContextListener implements LoggerContextListener {
